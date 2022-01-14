@@ -10,6 +10,7 @@ import {
   Link
 } from "react-router-dom";
 import Detail from './components/Detail';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -17,7 +18,10 @@ function App() {
       <Router>
         <Header/>
         <Switch>
-          <Route path= "/details">
+          <Route path="/login">
+            <Login/>
+          </Route>
+          <Route path= "/details/:id">
             <Detail/>
           </Route>
           <Route path= "/">

@@ -1,5 +1,8 @@
 import React from 'react'
 import styled from "styled-components"
+import { selectMovies } from '../features/movie/movieSlice'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Container = styled.div`
 
@@ -30,16 +33,20 @@ const Wrap = styled.div`
 `
 
 function Movies() {
+
+    const movies = useSelector(selectMovies);
+
     return (
         <Container>
             <h4>Recommended for You</h4>
             <Content>
-                <Wrap>
-                    <img src="https://static.cnews.fr/sites/default/files/scale_6040bdbe6a8ba_0.jpg"/>
-                </Wrap>
-                <Wrap>
-                    <img src="https://static.cnews.fr/sites/default/files/scale_6040bdbe6a8ba_0.jpg"/>
-                </Wrap>
+                {movies && movies.map((movie) =>{
+                     <Wrap key = {movie.id}>
+                         <Link to = {`/details/${movie.id}`}>
+                            <img src={movie.cardImg}/>
+                         </Link>
+                    </Wrap>
+                })}
                 <Wrap>
                     <img src="https://static.cnews.fr/sites/default/files/scale_6040bdbe6a8ba_0.jpg"/>
                 </Wrap>

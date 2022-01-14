@@ -1,5 +1,7 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from "styled-components"
+import { useParams } from 'react-router-dom'
+import db from "../firebase"
 
 const Container = styled.div`
     min-height: calc(100vh - 70px);
@@ -26,6 +28,7 @@ const ImageTitle = styled.div`
     min-height: 170px;
     min-width: 200px;
     width: 35vw;
+    margin-top: 60px;
 
     img{
         width: 100%;
@@ -96,39 +99,60 @@ const Description = styled.div`
     font-size: 20px;
     margin-top: 16px;
     color: rgb(249,249,249);
+    max-width: 700px;
 `
 
 function Detail() {
+
+    const {id} = useParams();
+    const [movie, setMovie] = useState();
+
+    useEffect(() =>{
+        //Grab movie
+        db.collection("movies").doc(id).get().then((doc)=>{
+            if(doc.exists){
+                setMovie(doc.data());
+            }else{
+
+            }})
+    }, [])
+
+
     return (
         <Container>
-            <Background>
-                <img src="https://www.awn.com/sites/default/files/styles/original/public/image/featured/1048902-delve-making-pixars-bao-new-featurette.jpg?itok=2ZX0r7p-"/>
-            </Background>
-            <ImageTitle>
-                <img src="/images/bao.png"/>
-            </ImageTitle>
-            <Controls>
-                <PlayButton>
-                    <img src="/images/play-icon-black.png"/>
-                    <span>PLAY</span>
-                </PlayButton>
-                <TrailerButton>
-                    <img src="/images/play-icon-white.png"/>
-                    <span>Trailer</span>
-                </TrailerButton>
-                <AddButton>
-                    <span>+</span>
-                </AddButton>
-                <GroupWatchButton>
-                    <img src="/images/group-icon.png"/>
-                </GroupWatchButton>
-            </Controls>
-            <SubTitle>
-                2018 -  7m - Family, Kids, Animation
-            </SubTitle>
-            <Description>
-                Text
-            </Description>
+            {movie &&
+            <>
+                    <Background>
+                    <img src={movie.backgroundImg}/>
+                </Background>
+                <ImageTitle>
+                    <img src={movie.titleImg}/>
+                </ImageTitle>
+                <Controls>
+                    <PlayButton>
+                        <img src="/images/play-icon-black.png"/>
+                        <span>PLAY</span>
+                    </PlayButton>
+                    <TrailerButton>
+                        <img src="/images/play-icon-white.png"/>
+                        <span>Trailer</span>
+                    </TrailerButton>
+                    <AddButton>
+                        <span>+</span>
+                    </AddButton>
+                    <GroupWatchButton>
+                        <img src="/images/group-icon.png"/>
+                    </GroupWatchButton>
+                </Controls>
+                <SubTitle>
+                    {movie.SubTitle}
+                </SubTitle>
+                <Description>
+                    {movie.Description}
+                </Description>
+            </>
+            }
+            
         </Container>
     )
 }
